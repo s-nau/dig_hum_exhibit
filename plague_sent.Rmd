@@ -1,0 +1,373 @@
+---
+title: "plague_sent_anal"
+author: "shimmy"
+date: "8/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+ 
+```{r setup, include=FALSE}
+library(tidyverse)
+library(tidytext)
+library(janeaustenr)
+library(stringr)
+library(readtext)
+library(readr)
+library(summarytools)
+library(data.table)
+library(wesanderson)
+
+```
+
+ 
+```{r}
+plague <- read.csv("plague_by_part_by_word.csv") %>% rename(no_punct = new_column) %>% drop_na(no_punct)
+plague <- plague %>% subset(no_punct != "")
+```
+
+
+```{r}
+# p2 <- read.csv("df2.csv")
+# p3 <- read.csv("df3.csv")
+# p4 <- read.csv("df4.csv")
+# p5 <- read.csv("df5.csv")
+nrc <- get_sentiments("nrc") %>% rename(no_punct = word)
+bing <- get_sentiments("bing") %>% rename(no_punct = word)
+afin <- get_sentiments("afin") %>% rename(no_punct = word)
+```
+
+
+```{r}
+#plague %>% filter(Word == "plague" | Word == "Plague") %>% ggplot(aes(x = count)) + geom_histogram() 
+```
+
+
+```{r}
+plague <-  plague%>% left_join(nrc, by = "no_punct")
+plague <-  plague%>% left_join(bing, by = "no_punct")
+plague <-  plague%>% left_join(afin, by = "no_punct")
+plague <- plague %>% rename(nrc_sent = sentiment.x, afin_sent = sentiment.y)
+# total5_sent$rows <- total5_sent%>% row.names()
+# p1_sent <- p1 %>% left_join(sents, by = "Word")
+# p2_sent <- p2 %>% left_join(sents, by = "Word")
+# p3_sent <- p3 %>% left_join(sents, by = "Word")
+# p4_sent <- p4 %>% left_join(sents, by = "Word")
+# p5_sent <- p5 %>% left_join(sents, by = "Word")
+# p1_sent %>% filter(!is.na(sentiment), sentiment != "positive", sentiment != "negative") %>% ggplot((aes(x = X))) + geom_histogram() + facet_wrap(~sentiment)
+# p2_sent %>% filter(!is.na(sentiment), sentiment != "positive", sentiment != "negative") %>% ggplot((aes(x = X))) + geom_histogram() + facet_wrap(~sentiment)
+# p3_sent %>% filter(!is.na(sentiment), sentiment != "positive", sentiment != "negative") %>% ggplot((aes(x = X))) + geom_histogram() + facet_wrap(~sentiment)
+# p4_sent %>% filter(!is.na(sentiment), sentiment != "positive", sentiment != "negative") %>% ggplot((aes(x = X))) + geom_histogram() + facet_wrap(~sentiment)
+# p5_sent %>% filter(!is.na(sentiment), sentiment != "positive", sentiment != "negative") %>% ggplot((aes(x = X))) + geom_histogram() + facet_wrap(~sentiment)
+# total5_sent_filtered <- total5_sent %>% filter(!is.na(sentiment), sentiment != "positive", sentiment != "negative")# %>% ggplot(aes(x = rows)) + geom_histogram(stat = "count", bins = 30) + facet_wrap(~sentiment)
+# total5_sent_filtered$num <- total5_sent_filtered %>% row.names() %>% as.numeric()
+# total5_sent_filtered %>% ggplot(aes(x = num))+ geom_histogram(bins = 50) + facet_wrap(~sentiment) +scale_fill_gradient(low="blue", high="red")
+```
+
+```{r}
+think <- c(
+"think",
+"consider",
+"determine",
+"expect",
+"feel",
+"guess",
+"judge",
+"realize",
+"see",
+"take",
+"understand",
+"comprehend",
+"conceive",
+"conclude",
+"credit",
+"deem",
+"envisage",
+"envision",
+"esteem",
+"estimate",
+"fancy",
+"feature",
+"foresee",
+"gather",
+"hold",
+"image
+imagine",
+"presume",
+"project",
+"reckon",
+"regard",
+"sense",
+"suppose",
+"surmise",
+"suspect",
+"vision",
+"visualize"
+) %>% as.data.frame() %>% rename(no_punct = ".")
+think$thought = rep("think", nrow(think))
+plague <- plague%>% left_join(think,  by = "no_punct")
+# total5_think %>%filter(!is.na(thought)) %>% ggplot(aes(x = rows)) + geom_histogram(bins = 20)
+```
+```{r}
+selfish <- c("egotistical",
+"greedy",
+"narcissistic",
+"self-centered",
+"egocentric",
+"egoistic",
+"egoistical",
+"egomaniacal",
+"egotistic",
+"hoggish",
+"mean",
+"mercenary",
+"miserly",
+"narrow",
+"parsimonious",
+"prejudiced",
+"self-indulgent",
+"self-interested",
+"self-seeking",
+"stingy",
+"ungenerous",
+"think") %>% as.data.frame() %>% rename(no_punct = ".")
+selfish$selfish <- rep("selfish", nrow(selfish))
+plague <- plague %>% left_join(selfish, by = "no_punct")
+# total5_selfish <- total5 %>% left_join(selfish, by = "Word")
+# total5_selfish %>%filter(!is.na(selfish)) %>% ggplot(aes(x = rows)) + geom_histogram(bins = 20) 
+```
+```{r}
+love <- c("love",
+  "affection",
+"appreciation",
+"devotion",
+"emotion",
+"fondness",
+"friendship",
+"infatuation",
+"lust",
+"passion",
+"respect",
+"taste",
+"tenderness",
+"yearning",
+"adulation",
+"allegiance",
+"amity",
+"amorousness",
+"amour",
+"ardor",
+"attachment",
+"case",
+"cherishing",
+"crush",
+"delight",
+"devotedness",
+"enchantment",
+"enjoyment",
+"fervor",
+"fidelity",
+"flame",
+"hankering",
+"idolatry",
+"inclination",
+"involvement",
+"like",
+"partiality",
+"piety",
+"rapture",
+"regard",
+"relish",
+"sentiment",
+"weakness",
+"worship",
+"zeal",
+"ardency")%>% as.data.frame() %>% rename(no_punct = ".")
+love$love <- rep("love", nrow(love))
+# total5_love <- total5 %>% left_join(love, by = "no_punct")
+# total5_love %>%filter(!is.na(love)) %>% ggplot(aes(x = rows)) + geom_histogram() 
+plague <- plague %>% left_join(love, by = "no_punct")
+```
+
+
+
+
+
+# ```{r}
+# # total5_sent_freq_part_1 <- total5_sent %>%filter(part == "part_1") %>% freq(sentiment) %>% as.data.frame() %>% rename(percent_total = "% Total", percent_valid = "% Valid", percent_valid_cum = "% Valid Cum.", percent_total_cum = "% Total Cum.") %>% setattr("row.names",  c("anger",        "anticipation", "disgust",      "fear",         "joy",          "negative",     "positive",     "sadness",      "surprise",     "trust",  "non_avail",      "Total"))
+# # total5_sent_freq_part_2 <- total5_sent %>%filter(part == "part_2") %>% freq(sentiment) %>% as.data.frame() %>% rename(percent_total = "% Total", percent_valid = "% Valid", percent_valid_cum = "% Valid Cum.", percent_total_cum = "% Total Cum.") %>% setattr("row.names",  c("anger",        "anticipation", "disgust",      "fear",         "joy",          "negative",     "positive",     "sadness",      "surprise",     "trust",  "non_avail",      "Total"))
+# # total5_sent_freq_part_3<- total5_sent %>%filter(part == "part_3") %>% freq(sentiment) %>% as.data.frame() %>% rename(percent_total = "% Total", percent_valid = "% Valid", percent_valid_cum = "% Valid Cum.", percent_total_cum = "% Total Cum.") %>% setattr("row.names",  c("anger",        "anticipation", "disgust",      "fear",         "joy",          "negative",     "positive",     "sadness",      "surprise",     "trust",  "non_avail",      "Total"))
+# # total5_sent_freq_part_4 <- total5_sent %>%filter(part == "part_4") %>% freq(sentiment) %>% as.data.frame() %>% rename(percent_total = "% Total", percent_valid = "% Valid", percent_valid_cum = "% Valid Cum.", percent_total_cum = "% Total Cum.") %>% setattr("row.names",  c("anger",        "anticipation", "disgust",      "fear",         "joy",          "negative",     "positive",     "sadness",      "surprise",     "trust",  "non_avail",      "Total"))
+# # total5_sent_freq_part_5 <- total5_sent %>%filter(part == "part_5") %>% freq(sentiment) %>% as.data.frame() %>% rename(percent_total = "% Total", percent_valid = "% Valid", percent_valid_cum = "% Valid Cum.", percent_total_cum = "% Total Cum.") %>% setattr("row.names",  c("anger",        "anticipation", "disgust",      "fear",         "joy",          "negative",     "positive",     "sadness",      "surprise",     "trust",  "non_avail",      "Total"))
+# # 
+# # total5_sent_freq <- total5_sent %>% freq(sentiment) %>% as.data.frame() %>% rename(percent_total = "% Total", percent_valid = "% Valid", percent_valid_cum = "% Valid Cum.", percent_total_cum = "% Total Cum.") %>% setattr("row.names",  c("anger",        "anticipation", "disgust",      "fear",         "joy",          "negative",     "positive",     "sadness",      "surprise",     "trust",  "non_avail",      "Total"))
+# ```
+```{r}
+anxiety <- c("angst",
+"apprehension",
+"concern",
+"disquiet",
+"doubt",
+"dread",
+"jitters",
+"misery",
+"misgiving",
+"mistrust",
+"nervousness",
+"panic",
+"restlessness",
+"suspense",
+"trouble",
+"uncertainty",
+"unease",
+"uneasiness",
+"botheration",
+"butterflies",
+"care",
+"creeps",
+"disquietude",
+"distress",
+"downer",
+"drag",
+"fidgets",
+"flap",
+"foreboding",
+"fretfulness",
+"fuss",
+"heebie-jeebies",
+"jumps",
+"needles",
+"shakes",
+"shivers",
+"solicitude",
+"watchfulness",
+"willies",
+"worriment",
+"all-overs",
+"nail-biting",
+"anxiety"
+) %>% as.data.frame() %>% rename(no_punct = ".")
+anxiety$anxiety<- rep("anxiety", nrow(anxiety))
+plague <- plague %>% left_join(anxiety, by = "no_punct")
+#plague %>% filter(!is.na(anxiety)) %>% ggplot(aes(x = count)) + geom_histogram(bins = 10)
+```
+```{r}
+#plague %>% filter(!is.na(value)) %>% ggplot(aes(x = count, y = value)) + geom_point()
+```
+```{r}
+we <-c("we") %>% as.data.frame() %>% rename(no_punct = ".")
+we$we <- rep("we", nrow(we))
+plague <- plague %>% left_join(we, by = "no_punct")
+```
+
+```{r}
+exile <- c("exile",
+           "banishment",
+            "diaspora",
+            "dispersion",
+            "displacement",
+"exclusion",
+"expatriation",
+"expulsion",
+"extradition",
+"migration",
+"ostracism",
+"proscription",
+"relegation",
+"scattering",
+"separation") %>% as.data.frame() %>% rename(no_punct = ".")
+exile$exile<- rep("exile", nrow(exile))
+plague <- plague %>% left_join(exile, by = "no_punct")
+```
+```{r}
+suffer <- c("suffer", "adversity",
+"anguish",
+"difficulty",
+"discomfort",
+"hardship",
+"misery",
+"misfortune",
+"ordeal",
+"torment",
+"torture",
+"affliction",
+"distress",
+"dolor",
+"martyrdom",
+"passion") %>% as.data.frame() %>% rename(no_punct = ".")
+suffer$suffer <- rep("suffer", nrow(suffer))
+plague <- plague %>% left_join(suffer, by = "no_punct")
+```
+
+
+```{r}
+# total5_sent_freq_part_1$row_names <- total5_sent_freq %>% rownames()
+# total5_sent_freq_part_2$row_names <- total5_sent_freq %>% rownames()
+# total5_sent_freq_part_3$row_names <- total5_sent_freq %>% rownames()
+# total5_sent_freq_part_4$row_names <- total5_sent_freq %>% rownames()
+# total5_sent_freq_part_5$row_names <- total5_sent_freq %>% rownames()
+# total5_sent_freq$row_names <- total5_sent_freq %>% rownames()
+```
+
+```{r}
+#plague %>% group_by(Word) %>% View()
+```
+
+
+```{r}
+# set.seed(1234)
+# wordcloud(words = , freq = d$freq, min.freq = 1,
+#           max.words=200, random.order=FALSE, rot.per=0.35, 
+#           colors=brewer.pal(8, "Dark2"))
+```
+
+
+```{r}
+# total5_sent_freq_part_1  %>% slice(1:10) %>% ggplot(aes(x = row_names, y = percent_total)) + geom_bar(stat="identity") + ggtitle("part1")
+# total5_sent_freq_part_2  %>% slice(1:10) %>% ggplot(aes(x = row_names, y = percent_total)) + geom_bar(stat="identity") + ggtitle("part2")
+# total5_sent_freq_part_3  %>% slice(1:10) %>% ggplot(aes(x = row_names, y = percent_total)) + geom_bar(stat="identity") + ggtitle("part3")
+# total5_sent_freq_part_4  %>% slice(1:10) %>% ggplot(aes(x = row_names, y = percent_total)) + geom_bar(stat="identity") + ggtitle("part4")
+# total5_sent_freq_part_5  %>% slice(1:10) %>% ggplot(aes(x = row_names, y = percent_total)) + geom_bar(stat="identity") + ggtitle("part5")
+# 
+# total5_sent_freq  %>% slice(1:10) %>% ggplot(aes(x = row_names, y = percent_total)) + geom_bar(stat="identity") + ggtitle("total")
+
+plague %>% write.csv("plague_edited_df.csv")
+```
+
+
+```{r}
+plague %>% group_by(part) %>% freq(nrc_sent)
+```
+
+
+```{r}
+plague %>% group_by(part) %>% freq(we)
+```
+
+```{r}
+love_freq <-plague %>% group_by(part) %>% freq(love) 
+```
+```{r}
+plague %>% group_by(part) %>% freq(anxiety)
+```
+```{r}
+plague %>% group_by(part) %>% freq(selfish)
+```
+```{r}
+plague %>% group_by(part) %>% freq(value) 
+
+```
+```{r}
+plague %>% group_by(part) %>% freq(afin_sent)
+```
+
+```{r}
+plague %>% group_by(part) %>% freq(suffer)
+```
+
+```{r}
+plague %>% group_by(part) %>% freq(exile) #%>% ggplot(aes(x = ))
+```
+
