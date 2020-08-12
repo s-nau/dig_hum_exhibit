@@ -2,7 +2,9 @@
 title: "plague_sent_anal"
 author: "shimmy"
 date: "8/3/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -372,13 +374,15 @@ plague %>% group_by(part) %>% freq(exile) #%>% ggplot(aes(x = ))
 ```
 
 ```{r}
-plague %>%filter(!is.na(we))%>% ggplot(aes(x = count)) + geom_histogram() + ggtitle("Change of \"WE\" Usage Throughout the Novel") + xlab("Index of Word") + ggsave("We.jpg")
-plague %>%filter(!is.na(love))%>% ggplot(aes(x = count)) + geom_histogram() + ggtitle("Change of \"love\" Usage Throughout the Novel") + xlab("Index of Word") + ggsave("love.jpg")
-plague %>%filter(!is.na(thought))%>% ggplot(aes(x = count)) + geom_histogram() +  ggtitle("Change of \"thought\" Usage Throughout the Novel") + xlab("Index of Word") + ggsave("thought.jpg")
-plague %>%filter(!is.na(selfish))%>% ggplot(aes(x = count)) + geom_histogram() + ggtitle("Change of \"selfish\" Usage Throughout the Novel") + xlab("Index of Word") + ggsave("selfish.jpg")
-plague %>%filter(!is.na(exile))%>% ggplot(aes(x = count)) + geom_histogram() +  ggtitle("Change of \"exile\" Usage Throughout the Novel") + xlab("Index of Word") + ggsave("exile.jpg")
-plague %>%filter(!is.na(suffer))%>% ggplot(aes(x = count)) + geom_histogram() +  ggtitle("Change of \"suffer\" Usage Throughout the Novel") + xlab("Index of Word") + ggsave("suffer.jpg")
-plague %>%filter(!is.na(anxiety))%>% ggplot(aes(x = count)) + geom_histogram() +  ggtitle("Change of \"anxiety\" Usage Throughout the Novel") + xlab("Index of Word") + ggsave("anxiety.jpg")
+plague %>%filter(!is.na(we))%>% ggplot(aes(x = count)) + geom_histogram() + ggtitle("Change of \"WE\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() +ggsave("We.jpg")
+plague %>%filter(!is.na(love))%>% ggplot(aes(x = count)) + geom_histogram() + ggtitle("Change of \"love\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() +  ggsave("love.jpg")
+plague %>%filter(!is.na(thought))%>% ggplot(aes(x = count)) + geom_histogram() +  ggtitle("Change of \"thought\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() +  ggsave("thought.jpg")
+plague %>%filter(!is.na(selfish))%>% ggplot(aes(x = count)) + geom_histogram() + ggtitle("Change of \"selfish\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() +  ggsave("selfish.jpg")
+plague %>%filter(!is.na(exile))%>% ggplot(aes(x = count)) + geom_histogram() +  ggtitle("Change of \"exile\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic()  + ggsave("exile.jpg")
+plague %>%filter(!is.na(suffer))%>% ggplot(aes(x = count)) + geom_histogram() +  ggtitle("Change of \"suffer\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() + ggsave("suffer.jpg")
+plague %>%filter(!is.na(anxiety))%>% ggplot(aes(x = count)) + geom_histogram() +  ggtitle("Change of \"anxiety\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() + ggsave("anxiety.jpg")
+plague %>%filter(!is.na(nrc_sent))%>% ggplot(aes(x = count)) + geom_histogram() + facet_wrap(~nrc_sent) + ggtitle("Change of \"sentiment\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() + ggsave("nrc_sent.jpg")
+
 ```
 
 
