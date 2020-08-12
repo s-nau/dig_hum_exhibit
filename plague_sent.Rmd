@@ -384,5 +384,11 @@ plague %>%filter(!is.na(anxiety))%>% ggplot(aes(x = count)) + geom_histogram() +
 plague %>%filter(!is.na(nrc_sent))%>% ggplot(aes(x = count)) + geom_histogram() + facet_wrap(~nrc_sent) + ggtitle("Change of \"sentiment\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() + ggsave("nrc_sent.jpg")
 
 ```
+```{r}
+plague %>% filter(!is.na(value)) %>%ggplot(aes(x = count, y = value)) + geom_point() + geom_smooth(method='lm')
+relation <-  lm(value ~count, data = plague)
+summary(relation)
+```
+
 
 
