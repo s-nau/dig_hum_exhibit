@@ -1,1 +1,2 @@
 # dig_hum_exhibit this repository contains files that where used for cleaning and text mining for the project.
+# this repository also contains some visualizations and frequency analysis of the text data. 
