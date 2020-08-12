@@ -345,11 +345,11 @@ plague %>% group_by(part) %>% freq(nrc_sent)
 
 
 ```{r}
-plague %>% group_by(part) %>% freq(we)
+plague %>% group_by(part) %>% freq(we) 
 ```
 
 ```{r}
-love_freq <-plague %>% group_by(part) %>% freq(love) 
+plague %>% group_by(part) %>% freq(love) 
 ```
 ```{r}
 plague %>% group_by(part) %>% freq(anxiety)
