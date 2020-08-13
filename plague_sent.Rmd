@@ -319,6 +319,44 @@ plague <- plague %>% left_join(suffer, by = "no_punct")
 
 
 ```{r}
+lonely <- c("lonely", "deserted",
+"desolate",
+"destitute",
+"empty",
+"homeless",
+"isolated",
+"lonesome",
+"reclusive",
+"solitary",
+"abandoned",
+"alone",
+"apart",
+"comfortless",
+"companionless",
+"disconsolate",
+"down",
+"estranged",
+"forsaken",
+"godforsaken",
+"left",
+"lone",
+"outcast",
+"rejected",
+"renounced",
+"secluded",
+"single",
+"troglodytic",
+"unattended",
+"unbefriended",
+"uncherished",
+"unsocial",
+"withdrawn")%>% as.data.frame() %>% rename(no_punct = ".")
+lonely$lonely<- rep("lonely", nrow(lonely))
+plague<-plague %>% left_join(lonely, by = "no_punct")
+```
+
+
+```{r}
 # set.seed(1234)
 # wordcloud(words = , freq = d$freq, min.freq = 1,
 #           max.words=200, random.order=FALSE, rot.per=0.35, 
@@ -340,7 +378,7 @@ plague %>% write.csv("plague_edited_df.csv")
 
 
 ```{r}
-plague %>% group_by(part) %>% freq(nrc_sent)
+plague %>% filter(!is.na(nrc_sent)) %>% group_by(part) %>% freq(nrc_sent)
 ```
 
 
@@ -358,19 +396,23 @@ plague %>% group_by(part) %>% freq(anxiety)
 plague %>% group_by(part) %>% freq(selfish)
 ```
 ```{r}
-plague %>% group_by(part) %>% freq(value) 
+plague %>% filter(!is.na(value)) %>% group_by(part) %>% freq(value) 
 
 ```
 ```{r}
-plague %>% group_by(part) %>% freq(afin_sent)
+plague %>%filter(!is.na(afin_sent)) %>% group_by(part) %>% freq(afin_sent)
 ```
 
 ```{r}
 plague %>% group_by(part) %>% freq(suffer)
+plague %>% group_by(part) %>% freq(suffer) %>% saveRDS("suffer_freq.rds")
 ```
 
 ```{r}
 plague %>% group_by(part) %>% freq(exile) #%>% ggplot(aes(x = ))
+```
+```{r}
+plague %>% group_by(part) %>% freq(lonely)
 ```
 
 ```{r}
@@ -382,6 +424,7 @@ plague %>%filter(!is.na(exile))%>% ggplot(aes(x = count , fill = part)) + geom_h
 plague %>%filter(!is.na(suffer))%>% ggplot(aes(x = count , fill = part)) + geom_histogram() +  ggtitle("Change of \"suffer\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() + ggsave("suffer.jpg")
 plague %>%filter(!is.na(anxiety))%>% ggplot(aes(x = count , fill = part)) + geom_histogram() +  ggtitle("Change of \"anxiety\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() + ggsave("anxiety.jpg")
 plague %>%filter(!is.na(nrc_sent))%>% ggplot(aes(x = count , fill = part)) + geom_histogram() + facet_wrap(~nrc_sent) + ggtitle("Change of \"sentiment\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() + ggsave("nrc_sent.jpg")
+plague %>%filter(!is.na(lonely))%>% ggplot(aes(x = count , fill = part)) + geom_histogram()  + ggtitle("Change of \"lonely\" Usage Throughout the Novel") + xlab("Index of Word") + theme_classic() + ggsave("lonely.jpg")
 
 ```
 ```{r}
